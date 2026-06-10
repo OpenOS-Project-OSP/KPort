@@ -72,6 +72,11 @@ jobs:
           GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
           MIN_QUOTA: "1500"
         run: |
+          if [[ -z "${GH_TOKEN}" ]]; then
+            echo "GH_TOKEN not set — skipping quota check."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           remaining=$(curl -sf \
             -H "Authorization: token ${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
