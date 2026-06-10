@@ -54,7 +54,7 @@ jobs:
 
       - name: Retry mirror
         env:
-          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          GH_TOKEN: ${{ secrets.SYNC_TOKEN }}  # Ensure GH_TOKEN is set for GitHub CLI
           WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
         run: |
           case "$WORKFLOW_NAME" in
@@ -68,7 +68,8 @@ jobs:
           echo "Retrying ${TARGET}..."
           gh workflow run "$TARGET" \
             --repo ${{ github.repository }} \
-            --ref main
+            --ref main \
+            --token $GH_TOKEN  # Pass the token to the GitHub CLI command
           echo "Retry triggered."
 
       - name: Write summary
